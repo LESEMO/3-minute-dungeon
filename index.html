@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3분던전 · 첫 번째 시련</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main>
+  <header><a class="brand" href="./">III <span>3분던전</span></a><span class="prototype">PLAYABLE PROTOTYPE / 01</span><button id="sound">사운드 OFF</button></header>
+  <section class="heading"><div><div class="eyebrow">DAILY DUNGEON</div><h1>잊혀진 왕의 방</h1><p>세 번의 전투, 단 한 번의 승리.</p></div><div class="daily">훈련용 던전 <span>무제한 재도전</span></div></section>
+  <section class="game-shell">
+    <div class="topbar"><div><span class="label">남은 시간</span><strong id="timer">03:00</strong></div><div class="waves"><span id="w1">01 · 척후병</span><i></i><span id="w2">02 · 근위대</span><i></i><span id="w3">03 · 타락한 왕</span></div><button id="pause">일시정지 ESC</button></div>
+    <div class="stage"><canvas id="game" width="1120" height="620" aria-label="방향키 이동, Z 기본공격, X 스킬, C 필살기로 플레이하는 던전"></canvas><div id="overlay" class="overlay"><div class="crest">III</div><div class="eyebrow">THE FIRST TRIAL</div><h2>용사여, 검을 들어라.</h2><p>척후병 셋, 근위대 둘, 그리고 왕.<br>180초 안에 마지막 적을 쓰러뜨리세요.</p><button id="start" class="primary">던전 입장 <span>↗</span></button><small>방향키 이동 · Z 검격 · X 검기 · C 천상의 심판</small></div><div id="announcement"></div></div>
+    <div class="bottom"><div class="vitals"><div class="hero-icon">✦</div><div><div class="hp-title">방랑하는 용사 <span id="hpText">320 / 320</span></div><div class="hp-track"><div id="hpFill"></div></div><div id="stats">공격력 24 · 방어력 6</div></div></div><div class="abilities"><div class="ability" id="aZ"><kbd>Z</kbd><div><b>검격</b><small>전방 근접 공격</small></div><em></em></div><div class="ability" id="aX"><kbd>X</kbd><div><b>빛의 검기</b><small>직선 관통 · 5초</small></div><em></em></div><div class="ability ultimate" id="aC"><kbd>C</kbd><div><b>천상의 심판</b><small>광역 + 공격 강화 · 35초</small></div><em></em></div></div></div>
+  </section>
+  <footer><span><b>HOW TO PLAY</b> <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> 이동 · 이동한 방향으로 공격 · 키를 누르고 있으면 연속 사용</span><span>180초 제한 / 3 WAVES</span></footer>
+  <details><summary>전투 수치와 프로토타입 안내</summary><p>용사 HP 320 / 공격 24 / 방어 6. 기본 공격 0.45초, 검기 공격력 ×2.5, 필살기 ×12 (반경 250), 사용 후 8초간 공격력 +30%. 피해량 = 공격력 − 방어력 (최소 1). 일반 HP 140 / 공격 15 / 방어 3, 엘리트 HP 520 / 공격 23 / 방어 6, 보스 HP 2200 / 공격 28 / 방어 9. 보스 30% 이하: 공격 +30%, 이동 +20%, 필살기 해금. 목표 전투 시간 약 90초(9 / 27 / 54초)는 초기 가정이며 실제 플레이로 조정합니다. 일일 제한·계정·온라인 랭킹은 아직 없으며, 최고 기록은 이 브라우저에 저장합니다.</p></details>
+</main><script src="game.js"></script>
+</body></html>
