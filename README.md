@@ -46,7 +46,78 @@ git push
 
 ## 링크로 공유하기
 
-GitHub 저장소 Settings → Pages → Deploy from a branch → main / root → Save. 배포가 끝나면 표시된 URL로 접속합니다. GitHub Free에서는 공개 저장소로 Pages를 사용할 수 있으며 비공개 저장소 지원은 요금제를 확인하세요. 현재 저장소 원격 연결이나 온라인 배포는 아직 수행하지 않았습니다.
+GitHub 저장소 Settings → Pages → Deploy from a branch → main / root → Save. 배포가 끝나면 표시된 URL로 접속합니다. GitHub Free에서는 공개 저장소로 Pages를 사용할 수 있으며 비공개 저장소 지원은 요금제를 확인하세요. 현재 원격 저장소는 `https://github.com/LESEMO/3-minute-dungeon.git`로 연결되어 있습니다. 온라인 배포 여부는 아직 확인하지 않았습니다.
+
+## Codex와 여러 PC에서 이어서 작업하기
+
+채팅을 다시 설명하는 대신 `AGENTS.md`에 작업 규칙, `PROJECT_STATUS.md`에 프로젝트 상태와 결정을 보관합니다. 두 파일도 코드처럼 커밋·푸시해야 다른 PC에서 읽을 수 있습니다. Git으로 공유되는 것은 저장소 파일입니다. 채팅 이력, 로그인, 로컬 설치 도구와 게임 최고 기록이 함께 복사되는 것은 아닙니다.
+
+참고한 [여러 PC에서 Codex 작업 이어가기 글](https://note.com/hatuo_0501/n/n09d12a15cfad?hl=ko)처럼, 필요한 결론을 Markdown에 남기고 코드와 함께 전달합니다. 글의 PROJECT.md / HANDOVER.md / TODO.md 역할은 이 프로젝트에서는 `PROJECT_STATUS.md` 한 파일에 통합했습니다. 맨 위의 **바로 이어받기**만 보면 중단 지점과 다음 첫 행동을 빠르게 확인할 수 있습니다.
+
+### 다른 PC에서 최초 한 번
+
+1. Git과 사용할 Codex를 설치하고 각각 로그인합니다. 개인 저장소에 접근 가능한 GitHub 계정을 사용합니다.
+2. 터미널에서 프로젝트를 보관할 상위 폴더로 이동해 실행합니다. 이미 clone한 폴더라면 다시 clone하지 말고 다음 절차로 갑니다.
+
+```powershell
+git clone https://github.com/LESEMO/3-minute-dungeon.git
+cd 3-minute-dungeon
+git config user.name "본인 이름"
+git config user.email "본인 GitHub 이메일 또는 noreply 이메일"
+```
+
+3. Codex에서 이 **로컬 프로젝트 폴더**를 열고 그 폴더를 대상으로 채팅을 시작합니다. 원래 PC의 경로와 같을 필요는 없습니다.
+4. 아래 시작 프롬프트를 보냅니다.
+
+### 매번 작업 시작할 때 — Codex에 보낼 말
+
+```text
+이 폴더는 GitHub LESEMO/3-minute-dungeon의 3분던전 프로젝트야.
+AGENTS.md를 읽고 git status와 현재 브랜치를 확인해줘.
+미커밋 변경이 없으면 git pull --ff-only로 최신화하고,
+최신 PROJECT_STATUS.md, README.md, 필요하면 BALANCE.md를 읽어줘.
+PROJECT_STATUS.md의 '바로 이어받기'를 기준으로 중단 지점과 다음 첫 행동을 확인해줘.
+변경이 남아 있거나 충돌·분기가 있으면 작업을 보존하고 상황을 알려줘.
+완료된 것, 미완료인 것, 다음 작업을 간단히 설명해줘. 아직 게임 수정은 하지 마.
+```
+
+상태 설명을 받은 뒤 구체적인 요청을 보냅니다. 예:
+
+```text
+이번에는 보스 체력을 2200에서 2000으로 낮춰줘.
+관련 설명 수치도 맞추고 필요한 검증을 한 뒤 PROJECT_STATUS.md에 기록해줘.
+```
+
+### 매번 작업 끝낼 때 — Codex에 보낼 말
+
+```text
+오늘 작업을 마무리해줘. 변경 내용과 검증 결과, 미완료 사항, 다음 할 일을
+PROJECT_STATUS.md에 반영하고 관련 문서도 맞춰줘.
+'바로 이어받기'에는 진행 중인 일의 중단 지점, 미해결 문제,
+다음 첫 행동과 완료 기준, 의도적으로 보류한 내용을 짧게 갱신해줘.
+git diff와 status를 확인해 이번 작업의 코드와 관리 파일을 함께 커밋하고
+현재 브랜치를 origin에 푸시해줘. 다른 작업의 변경이 섞여 있으면 분리해줘.
+커밋 해시와 푸시 성공 여부를 알려줘. 실패하면 원인과 남은 조치를 알려줘.
+```
+
+푸시 성공 보고까지 확인하고 PC를 옮깁니다. 인증이나 실행 권한 승인이 필요하면 해당 PC에서 처리합니다. Codex에게 Git 작업을 맡기지 않는다면 문서 갱신 후 터미널에서 직접 실행합니다.
+
+```powershell
+git status
+git diff
+git add AGENTS.md PROJECT_STATUS.md README.md
+# 게임 파일을 수정했다면 해당 파일도 git add로 포함합니다.
+git commit -m "Document project handoff workflow"
+git push
+```
+
+### PC 간 왕복 확인
+
+- PC A: 위 종료 프롬프트로 관리 파일까지 푸시.
+- PC B: clone/pull 후 시작 프롬프트로 프로젝트 내용을 제대로 설명하는지 확인.
+- PC B: 화면 문구 하나를 바꾸고 실행 확인 후 종료 프롬프트로 푸시.
+- PC A: 시작 프롬프트로 pull 후 코드와 PROJECT_STATUS.md 양쪽의 변경 확인.
+- 두 PC에서 같은 파일을 동시에 수정하는 대신 한쪽 작업을 푸시한 뒤 다른 쪽에서 받습니다.
 
 ## 파일과 밸런스
 
