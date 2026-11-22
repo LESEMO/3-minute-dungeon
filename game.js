@@ -1,14 +1,14 @@
 'use strict';
 const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d'),W=1120,H=620;
 const $=s=>document.querySelector(s),keys=new Set();
-const CONFIG={hero:{hp:320,atk:24,def:6,speed:235},monsters:[{hp:140,atk:15,def:3,speed:88,r:17},{hp:520,atk:23,def:6,speed:78,r:23},{hp:2200,atk:28,def:9,speed:62,r:34}],limit:180,combo:[{range:85,angle:1.1,mult:.85,cooldown:.2},{range:100,angle:Math.acos(.25),mult:1,cooldown:.3},{range:80,offset:70,mult:1.25,cooldown:.5}],attackLock:.1,comboReset:1,contactPush:18};
-let player,enemies=[],shots=[],effects=[],texts=[],wave=0,time=0,state='ready',last=0,notice=0,kills=0,sound=false,audioCtx;
-function reset(){player={...CONFIG.hero,maxHp:320,x:W/2,y:H*.72,dx:0,dy:-1,r:16,z:0,xcd:0,c:0,buff:0,inv:0,combo:0,comboTimer:0,moveLock:0};enemies=[];shots=[];effects=[];texts=[];wave=0;time=0;kills=0;spawn();}
+const CONFIG={hero:{hp:320,atk:24,def:6,speed:235},monsters:[{hp:140,atk:15,def:3,speed:88,r:17},{hp:520,atk:23,def:6,speed:78,r:23},{hp:2200,atk:28,def:9,speed:62,r:34}],limit:180,combo:[{range:85,angle:1.1,mult:.85,cooldown:.2},{range:100,angle:Math.acos(.25),mult:1,cooldown:.3},{range:80,offset:70,mult:1.25,cooldown:.5}],attackLock:.1,comboReset:1,contactPush:18,score:{time:5000,hp:4000,monsters:[100,200,300]}};
+let player,enemies=[],shots=[],effects=[],texts=[],wave=0,time=0,state='ready',last=0,notice=0,kills=0,killCounts=[0,0,0],sound=false,audioCtx;
+function reset(){player={...CONFIG.hero,maxHp:320,x:W/2,y:H*.72,dx:0,dy:-1,r:16,z:0,xcd:0,c:0,buff:0,inv:0,combo:0,comboTimer:0,moveLock:0};enemies=[];shots=[];effects=[];texts=[];wave=0;time=0;kills=0;killCounts=[0,0,0];spawn();}
 function spawn(){wave++;const positions=wave===1?[[330,160],[560,130],[790,160]]:wave===2?[[380,170],[740,170]]:[[560,180]];enemies=positions.map(([x,y],i)=>({...CONFIG.monsters[wave-1],maxHp:CONFIG.monsters[wave-1].hp,x,y,type:wave-1,id:i,cd:1.2+i*.5,skill:3+i,ult:5,wind:0,action:null,phase:false,flash:0}));announce(['','WAVE 01 · 왕의 척후병','WAVE 02 · 철갑 근위대','WAVE 03 · 타락한 왕'][wave]);}
 function announce(t){$('#announcement').textContent=t;notice=3;}
 function tone(freq,duration=.08){if(!sound)return;try{audioCtx??=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=freq;g.gain.setValueAtTime(.035,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration);}catch{}}
-function damage(e,amount){const n=Math.max(1,Math.round(amount-e.def));e.hp-=n;e.flash=.12;texts.push({x:e.x,y:e.y-e.r,t:.75,text:String(n),color:'#ffe4a9'});tone(180+Math.random()*80);}
-function hurt(amount){if(player.inv>0)return;const n=Math.max(1,Math.round(amount-player.def));player.hp-=n;player.inv=.65;texts.push({x:player.x,y:player.y-25,t:.8,text:'−'+n,color:'#ff8383'});tone(90,.15);if(player.hp<=0){player.hp=0;finish(false,'용사는 잠시 쓰러졌다.');}}
+function damage(e,amount){if(state!=='playing'||e.hp<=0)return;const n=Math.max(1,Math.round(amount-e.def));e.hp-=n;if(e.hp<=0){kills++;if(Number.isInteger(e.type)&&e.type>=0&&e.type<3)killCounts[e.type]++;}e.flash=.12;texts.push({x:e.x,y:e.y-e.r,t:.75,text:String(n),color:'#ffe4a9'});tone(180+Math.random()*80);}
+function hurt(amount){if(state!=='playing'||player.inv>0)return;const n=Math.max(1,Math.round(amount-player.def));player.hp-=n;player.inv=.65;texts.push({x:player.x,y:player.y-25,t:.8,text:'−'+n,color:'#ff8383'});tone(90,.15);if(player.hp<=0){player.hp=0;finish(false,'용사는 잠시 쓰러졌다.');}}
 function attack(kind){
 const atk=player.atk*(player.buff>0?1.3:1);
 if(kind==='z'&&player.z<=0){
@@ -57,8 +57,20 @@ for(const e of enemies){if(e.hp<=0)continue;e.flash=Math.max(0,e.flash-dt);if(e.
 for(let i=0;i<enemies.length;i++)for(let j=i+1;j<enemies.length;j++){const a=enemies[i],b=enemies[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),min=a.r+b.r+6;if(d>0&&d<min){const p=(min-d)*.5;a.x-=dx/d*p;a.y-=dy/d*p;b.x+=dx/d*p;b.y+=dy/d*p;}}
 contactEnemies();if(state!=='playing'){hud();return;}
 for(const s of shots){s.x+=s.vx*dt;s.y+=s.vy*dt;s.t-=dt;if(s.friendly){enemies.forEach(e=>{if(e.hp>0&&!s.hit.has(e)&&Math.hypot(s.x-e.x,s.y-e.y)<s.r+e.r){damage(e,s.atk);s.hit.add(e);}});}else if(Math.hypot(s.x-player.x,s.y-player.y)<s.r+player.r){hurt(s.atk);s.t=0;}}
-shots=shots.filter(s=>s.t>0&&s.x>-30&&s.x<W+30&&s.y>-30&&s.y<H+30);updateEffects(dt);texts.forEach(t=>{t.t-=dt;t.y-=dt*30;});texts=texts.filter(t=>t.t>0);const dead=enemies.filter(e=>e.hp<=0);kills+=dead.length;enemies=enemies.filter(e=>e.hp>0);if(state==='playing'&&enemies.length===0){shots=shots.filter(s=>s.friendly);effects=effects.filter(e=>e.kind!=='burst');if(wave<3)spawn();else finish(true,'왕의 침묵, 용사의 승리.');}hud();}
-function finish(win,title){state=win?'won':'lost';let record='';if(win){try{const old=Number(localStorage.getItem('dungeon-best')||Infinity);if(time<old)localStorage.setItem('dungeon-best',String(time));record=' · 최고 '+format(Math.min(time,old));}catch{}}$('#overlay').classList.remove('hidden');$('#overlay').innerHTML=`<div class="crest">${win?'✦':'III'}</div><div class="eyebrow">${win?'DUNGEON CLEARED':'TRY AGAIN'}</div><h2>${title}</h2><p>${format(time)} 경과 · ${kills}마리 처치${record}<br>${win?'오늘의 시련을 완수했습니다.':'적의 붉은 예고 범위를 피하고 검기를 활용하세요.'}</p><button id="start" class="primary">다시 도전 ↗</button>`;$('#start').onclick=start;hud();}
+shots=shots.filter(s=>s.t>0&&s.x>-30&&s.x<W+30&&s.y>-30&&s.y<H+30);updateEffects(dt);texts.forEach(t=>{t.t-=dt;t.y-=dt*30;});texts=texts.filter(t=>t.t>0);enemies=enemies.filter(e=>e.hp>0);if(state==='playing'&&enemies.length===0){shots=shots.filter(s=>s.friendly);effects=effects.filter(e=>e.kind!=='burst');if(wave<3)spawn();else finish(true,'왕의 침묵, 용사의 승리.');}hud();}
+function calculateScore(win){
+  const remaining=Math.max(0,Math.min(CONFIG.limit,CONFIG.limit-time));
+  const health=Math.max(0,Math.min(1,player.hp/player.maxHp));
+  const timeScore=win?Math.round(CONFIG.score.time*remaining/CONFIG.limit):0;
+  const hpScore=win?Math.round(CONFIG.score.hp*health):0;
+  const monsterScore=killCounts.reduce((sum,count,i)=>sum+count*CONFIG.score.monsters[i],0);
+  return {timeScore,hpScore,monsterScore,total:timeScore+hpScore+monsterScore,remaining,health};
+}
+function scoreMarkup(win){
+  const score=calculateScore(win),number=n=>n.toLocaleString('ko-KR');
+  return `<section class="score-card" aria-label="플레이 점수"><div class="score-total">총점 <strong>${number(score.total)}</strong><span>점</span></div><dl class="score-breakdown"><div><dt>남은 시간 <small>${score.remaining.toFixed(1)}초 / ${CONFIG.limit}초</small></dt><dd>${number(score.timeScore)}점</dd></div><div><dt>남은 체력 <small>${(score.health*100).toFixed(1)}%</small></dt><dd>${number(score.hpScore)}점</dd></div><div><dt>몬스터 처치</dt><dd>${number(score.monsterScore)}점</dd></div></dl>${win?'':'<p class="score-note">시간·체력 보너스는 클리어 시에만 지급됩니다.</p>'}</section>`;
+}
+function finish(win,title){if(state!=='playing')return;state=win?'won':'lost';let record='';if(win){try{const old=Number(localStorage.getItem('dungeon-best')||Infinity);if(time<old)localStorage.setItem('dungeon-best',String(time));record=' · 최고 '+format(Math.min(time,old));}catch{}}$('#overlay').classList.remove('hidden');$('#overlay').innerHTML=`<div class="crest result-crest">${win?'✦':'III'}</div><div class="eyebrow">${win?'DUNGEON CLEARED':'TRY AGAIN'}</div><h2>${title}</h2><p>${format(time)} 경과 · ${kills}마리 처치${record}<br>${win?'오늘의 시련을 완수했습니다.':'적의 붉은 예고 범위를 피하고 검기를 활용하세요.'}</p>${scoreMarkup(win)}<button id="start" class="primary">다시 도전 ↗</button>`;$('#start').onclick=start;hud();}
 function format(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;}
 function hud(){$('#timer').textContent=format(Math.max(0,180-time));$('#timer').style.color=time>150?'#ff8888':'';$('#hpText').textContent=`${Math.ceil(player.hp)} / ${player.maxHp}`;$('#hpFill').style.width=100*player.hp/player.maxHp+'%';$('#stats').textContent=`공격력 ${player.buff>0?'31 ↑ ('+Math.ceil(player.buff)+'초)':'24'} · 방어력 6`;for(let i=1;i<=3;i++)$('#w'+i).className=i===wave?'active':i<wave?'done':'';for(const [id,cd]of [['Z',player.z],['X',player.xcd],['C',player.c]]){$('#a'+id).classList.toggle('cooldown',cd>0);$('#a'+id+' em').textContent=cd>0?cd.toFixed(1)+'s':'';}}
 function circle(x,y,r,fill,stroke){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}}

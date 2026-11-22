@@ -47,3 +47,29 @@ enemies=[];update(.01);assert.equal(state,'won');
 reset();state='playing';player.hp=1;enemies[0].x=player.x;enemies[0].y=player.y;update(.01);assert.equal(state,'lost');
 reset();state='playing';time=179.99;update(.02);assert.equal(state,'lost');
 `);
+
+check('score weights, bounds and failure bonuses',setup+`
+killCounts=[3,2,1];time=90;player.hp=256;
+assert.equal(calculateScore(true).total,6700);
+assert.equal(calculateScore(true).monsterScore,1000);
+assert.equal(calculateScore(false).total,1000);
+time=0;player.hp=320;assert.equal(calculateScore(true).total,10000);
+time=180;player.hp=0;assert.equal(calculateScore(true).total,1000);
+time=200;player.hp=-1;assert.equal(calculateScore(true).total,1000);
+`);
+check('kill rewards counted once, all waves and result breakdown',`
+reset();state='playing';
+for(let stage=1;stage<=3;stage++){
+  for(const enemy of enemies){damage(enemy,10000);damage(enemy,10000);}
+  update(.01);
+}
+assert.equal(state,'won');assert.equal(kills,6);
+assert.equal(killCounts.join(','),'3,2,1');assert.equal(calculateScore(true).monsterScore,1000);
+assert.ok($('#overlay').innerHTML.includes('총점'));assert.ok(!$('#overlay').innerHTML.includes('score-monsters'));
+reset();state='playing';damage(enemies[0],10000);player.hp=1;hurt(100);
+assert.equal(state,'lost');assert.equal(calculateScore(false).total,100);
+assert.ok($('#overlay').innerHTML.includes('클리어 시에만'));
+const frozen=kills;damage(enemies[1],10000);assert.equal(kills,frozen);
+reset();assert.equal(kills,0);assert.equal(killCounts.join(','),'0,0,0');
+state='playing';time=179.99;update(.02);assert.equal(state,'lost');assert.equal(calculateScore(false).total,0);
+`);
