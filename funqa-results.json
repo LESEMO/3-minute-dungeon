@@ -1,0 +1,352 @@
+{
+  "version": "v0.3.2",
+  "node": "v24.22.3",
+  "gameSha256": "dbe1c30e49a90924b158d2a0f684509750893d75d712ad096e5a3fd640d66957",
+  "dt": 0.016666666666666666,
+  "results": [
+    {
+      "mode": "normal",
+      "reaction": 0.15,
+      "result": "death",
+      "seconds": 41.71666666666558,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 47,
+      "casts": {
+        "z": 100,
+        "x": 9,
+        "c": 2
+      },
+      "cTimes": [
+        0.4666666666666666,
+        35.4833333333326
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 5.033333333333321,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 15.033333333333488,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 21.649999999998773,
+          "complete": false
+        }
+      ],
+      "pushes": 47
+    },
+    {
+      "mode": "normal",
+      "reaction": 0.2,
+      "result": "death",
+      "seconds": 43.84999999999879,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 47,
+      "casts": {
+        "z": 103,
+        "x": 9,
+        "c": 2
+      },
+      "cTimes": [
+        0.4333333333333333,
+        35.44999999999927
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 5.599999999999985,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 14.266666666666834,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 23.983333333331974,
+          "complete": false
+        }
+      ],
+      "pushes": 47
+    },
+    {
+      "mode": "normal",
+      "reaction": 0.25,
+      "result": "death",
+      "seconds": 38.01666666666579,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 44,
+      "casts": {
+        "z": 87,
+        "x": 8,
+        "c": 2
+      },
+      "cTimes": [
+        0.5333333333333333,
+        35.549999999999265
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 0.5333333333333333,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 12.650000000000235,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 24.833333333332224,
+          "complete": false
+        }
+      ],
+      "pushes": 44
+    },
+    {
+      "mode": "normal",
+      "reaction": 0.3,
+      "result": "death",
+      "seconds": 36.93333333333252,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 44,
+      "casts": {
+        "z": 91,
+        "x": 8,
+        "c": 2
+      },
+      "cTimes": [
+        0.6166666666666669,
+        35.93333333333258
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 0.6166666666666669,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 14.683333333333673,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 21.633333333332182,
+          "complete": false
+        }
+      ],
+      "pushes": 44
+    },
+    {
+      "mode": "normal",
+      "reaction": 0.35,
+      "result": "death",
+      "seconds": 32.749999999999424,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 40,
+      "casts": {
+        "z": 76,
+        "x": 7,
+        "c": 1
+      },
+      "cTimes": [
+        0.7166666666666672
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 0.7166666666666672,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 15.950000000000335,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 16.083333333332423,
+          "complete": false
+        }
+      ],
+      "pushes": 37
+    },
+    {
+      "mode": "normal",
+      "reaction": 0.4,
+      "result": "death",
+      "seconds": 44.71666666666541,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 49,
+      "casts": {
+        "z": 91,
+        "x": 9,
+        "c": 2
+      },
+      "cTimes": [
+        0.4333333333333333,
+        35.44999999999927
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 5.633333333333319,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 17.81666666666663,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 21.26666666666546,
+          "complete": false
+        }
+      ],
+      "pushes": 49
+    },
+    {
+      "mode": "flee",
+      "reaction": 0.2,
+      "clockwise": 1,
+      "result": "timeout",
+      "seconds": 180.00000000003539,
+      "hp": 320,
+      "wave": 1,
+      "kills": 0,
+      "hits": 0,
+      "casts": {
+        "z": 0,
+        "x": 0,
+        "c": 0
+      },
+      "cTimes": [],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 180.00000000003539,
+          "complete": false
+        }
+      ],
+      "pushes": 0
+    },
+    {
+      "mode": "flee",
+      "reaction": 0.3,
+      "clockwise": -1,
+      "result": "timeout",
+      "seconds": 180.00000000003539,
+      "hp": 320,
+      "wave": 1,
+      "kills": 0,
+      "hits": 0,
+      "casts": {
+        "z": 0,
+        "x": 0,
+        "c": 0
+      },
+      "cTimes": [],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 180.00000000003539,
+          "complete": false
+        }
+      ],
+      "pushes": 0
+    },
+    {
+      "mode": "stationary",
+      "reaction": 0.2,
+      "skills": "z",
+      "result": "death",
+      "seconds": 36.38333333333255,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 15,
+      "casts": {
+        "z": 105,
+        "x": 0,
+        "c": 0
+      },
+      "cTimes": [],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 4.933333333333321,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 12.100000000000326,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 19.349999999998904,
+          "complete": false
+        }
+      ],
+      "pushes": 0
+    },
+    {
+      "mode": "stationary",
+      "reaction": 0.2,
+      "skills": "zxc",
+      "result": "death",
+      "seconds": 35.59999999999926,
+      "hp": 0,
+      "wave": 3,
+      "kills": 5,
+      "hits": 15,
+      "casts": {
+        "z": 102,
+        "x": 8,
+        "c": 2
+      },
+      "cTimes": [
+        0.016666666666666666,
+        35.03333333333263
+      ],
+      "waves": [
+        {
+          "wave": 1,
+          "seconds": 4.216666666666657,
+          "complete": true
+        },
+        {
+          "wave": 2,
+          "seconds": 10.716666666666999,
+          "complete": true
+        },
+        {
+          "wave": 3,
+          "seconds": 20.666666666665606,
+          "complete": false
+        }
+      ],
+      "pushes": 0
+    }
+  ]
+}

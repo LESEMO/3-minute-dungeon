@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const element = {getContext:()=>({}),style:{},classList:{add(){},remove(){},toggle(){}}};
 const context = vm.createContext({document:{querySelector:()=>element,addEventListener(){}},window:{addEventListener(){}},requestAnimationFrame(){},localStorage:{getItem(){return null;},setItem(){}},console});
-vm.runInContext(fs.readFileSync('game.js','utf8'),context);
+vm.runInContext(fs.readFileSync('theme-art.js','utf8')+'\n'+fs.readFileSync('game.js','utf8'),context);
 function check(name, code){vm.runInContext(code,context);console.log('PASS '+name);}
 context.assert=assert;
 const setup="reset();state='playing';keys.clear();player.x=400;player.y=300;player.dx=1;player.dy=0;enemies=[];";
